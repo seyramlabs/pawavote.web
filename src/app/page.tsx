@@ -204,7 +204,9 @@ export default function Page() {
         <div className="lg:flex text-center justify-between lg:my-20 my-9">
           <Heading2A text='Ongoing events' />
           {/* <div className="text-4xl font-semibold">Ongoing Events </div> */}
-          <div className="text-center mt-2"><CustomButton onClick={() => route.push('/competitions')} view='secondary' label='View more' /></div>
+          <div className="text-center mt-2">
+            <CustomButton onClick={() => route.push('/events')} view='secondary' label='View more' />
+          </div>
         </div>
         {/* card */}
         <div className="grid lg:grid-cols-4 grid-cols-2 lg:mb-20 mb-9 lg:gap-10 gap-7">

@@ -6,8 +6,10 @@ import {
   CustomPagination,
 } from '@/app/(components)/_element-component/input/pagination';
 import { EventComponent } from '@/app/(components)/_page-components/eventCard';
+import { useRouter } from 'next/navigation';
 
 export default function Events() {
+  const route = useRouter();
   const events = [
     { id: 1, itemName: 'Concert', image: '/evnt1.png', date: 'Wed, Dec 13, 2022', time: '5:00 PM', location: 'Logical night club', cost: 'Free ticket' },
     { id: 2, itemName: 'Concert', image: '/evnt2.png', date: 'Wed, Dec 13, 2022', time: '5:00 PM', location: 'Logical night club', cost: 'GHC 300' },
@@ -49,6 +51,8 @@ export default function Events() {
       <div className="grid md:grid-cols-4 grid-cols-2 mb-20 gap-10">
         {events.map((item, index) => (
           <div className="" key={index}>
+            <div onClick={()=>route.push('/event-detail/'+item.id)}>
+
             <EventComponent item={{
               itemName: item.itemName,
               image: item.image,
@@ -57,6 +61,7 @@ export default function Events() {
               location: item.location,
               cost: item.cost
             }} />
+            </div>
           </div>
         ))}
       </div>
