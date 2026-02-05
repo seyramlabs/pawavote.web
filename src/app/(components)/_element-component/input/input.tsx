@@ -19,6 +19,7 @@ interface RideShareInputProps {
   className?: string;
   required?: boolean
   name: string
+  error?: string
 }
 
 export function CustomInput({
@@ -28,32 +29,38 @@ export function CustomInput({
   onChange,
   type = 'text',
   className,
+  error,
   required,
   name,
   ...props
 }: RideShareInputProps) {
   return (
-    <Input
-      defaultValue={defaultValue}
-      id={name}
-      name={name}
-      type={type === 'number' ? 'text' : type}
-      required={required}
-      placeholder={placeholder}
-      value={value}
-      onChange={(event) => {
-        if (type === 'number') {
-          const regex = /^[0-9]+$/;
-          if (regex.test(event.target.value) || event.target.value === '') {
+    <div>
+      <Input
+        defaultValue={defaultValue}
+        id={name}
+        name={name}
+        type={type === 'number' ? 'text' : type}
+        required={required}
+        placeholder={placeholder}
+        value={value}
+        onChange={(event) => {
+          if (type === 'number') {
+            const regex = /^[0-9]+$/;
+            if (regex.test(event.target.value) || event.target.value === '') {
+              onChange?.(event);
+            }
+          } else {
             onChange?.(event);
           }
-        } else {
-          onChange?.(event);
-        }
-      }}
-      className={cn('h-12 hover:ring! hover:ring-appsOrange! shadow-none rounded-lg border-none bg-gray-100 text-appGray', className)}
-      {...props}
-    />
+        }}
+        className={cn('h-12 hover:ring! hover:ring-appsOrange! shadow-none rounded-lg border-none bg-gray-100 text-appGray', className)}
+        {...props}
+      />
+      {error && (
+        <span className="text-xs text-red-500 pl-2">{error}</span>
+      )}
+    </div>
   );
 }
 
@@ -63,8 +70,8 @@ interface RideShareSelectProps {
   className?: string;
   placeholder?: string;
   value?: string;
-  name:string
-  defaultValue?:string
+  name: string
+  defaultValue?: string
 }
 
 export function CustomSelect({

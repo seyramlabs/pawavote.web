@@ -6,8 +6,14 @@ import {
   CustomPagination,
 } from '@/app/(components)/_element-component/input/pagination';
 import { EventComponent } from '@/app/(components)/_page-components/eventCard';
+import { NomineesServer } from '@/app/_homeResources/logic/server';
+import { useFetchData } from '@/lib/function/useFetch';
+import { useRouter } from 'next/navigation';
 
 export default function Events() {
+  const {data, isLoading, isError} = useFetchData('event', NomineesServer.GetAllAwards(), {})
+  const awardsList = data?.data?.data?.data || []
+  const route = useRouter()
   const events = [
     { id: 1, itemName: 'Concert', image: '/evnt1.png', date: 'Wed, Dec 13, 2022', time: '5:00 PM', location: 'Logical night club', cost: 'Free ticket' },
     { id: 2, itemName: 'Concert', image: '/evnt2.png', date: 'Wed, Dec 13, 2022', time: '5:00 PM', location: 'Logical night club', cost: 'GHC 300' },
@@ -47,15 +53,17 @@ export default function Events() {
         </div>
       </div>
       <div className="grid md:grid-cols-4 grid-cols-2 mb-20 gap-10">
-        {events.map((item, index) => (
-          <div className="" key={index}>
+        {awardsList.map((item: any, index: number) => (
+          <div 
+          onClick={()=>route.push(`/event-detail/${item.id}`)}
+          className="" key={index}>
             <EventComponent item={{
-              itemName: item.itemName,
-              image: item.image,
-              date: item.date,
-              time: item.time,
-              location: item.location,
-              cost: item.cost
+              itemName: item?.name,
+              image: item?.image,
+              date: item?.date,
+              time: item?.time,
+              location: item?.location,
+              cost: item?.cost
             }} />
           </div>
         ))}

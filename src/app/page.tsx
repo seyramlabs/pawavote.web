@@ -1,5 +1,7 @@
 'use client'
 import { useState } from 'react';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 
 import {
   ArrowRight,
@@ -21,10 +23,13 @@ import {
   ParagraphText,
 } from './(components)/_element-component/texts/text';
 import { EventComponent } from './(components)/_page-components/eventCard';
+import { useFetchData } from '@/lib/function/useFetch';
+import { NomineesServer } from './_homeResources/logic/server';
 
 export default function Page() {
   const [states, setStates] = useState({
-    openModal: false
+    openModal: false,
+    code: '',
   });
   const data1 = [
     { id: 1, item: 'unlimited events' },
@@ -41,55 +46,85 @@ export default function Page() {
     { id: 4, itemName: 'Concert', image: '/evnt4.png', date: 'Wed, Dec 13, 2022', time: '5:00 PM', location: 'Logical night club', cost: 'Free ticket' },
   ]
   const route = useRouter()
+  const { data, isLoading, refetch } = useFetchData('nominee', NomineesServer.GetNomineeByCode(states.code), {})
+  const { data: eventData, isLoading: eventLoading, refetch: eventRefetch } = useFetchData('nominee', NomineesServer.GetAllAwards(), {})
+
+  const responseData = data?.data?.data || {};
+  const eventResponseData = eventData?.data?.data?.data || [];
+
+  console.log("🚀 ~ Page ~ data:", eventResponseData)
+  const formik = useFormik({
+    initialValues: {
+      code: '',
+    },
+    enableReinitialize: true,
+    onSubmit: async (values) => {
+      // console.log("🚀 ~ Page ~ values:", values)
+      updateStates(setStates, { openModal: true, code: values.code })
+
+    },
+    validationSchema: Yup.object().shape({
+      code: Yup.string().required('code is required'),
+    }),
+  })
   return (
     <div>
       <CustomModal
         open={states.openModal}
         title={''}
         content={
-          <div>
-            <div className="grid grid-cols-2  ">
-              <div className="w-full ">
-                <picture>
-                  <img src="/evnt1.png" className="w-full h-[15rem] " alt="" />
-                </picture>
+          isLoading ? <div>Loading...</div> : Object.keys(responseData).length > 0 ?
+            <div>
+              <div className="grid grid-cols-2  ">
+                <div className="w-full ">
+                  <picture>
+                    <img src={responseData?.avatar || "/evnt1.png"}
+                      className="w-full h-[15rem] "
+                      alt="avatar" />
+                  </picture>
+                </div>
+                {/* <Image src="/evnt1.png" className="h-full" height={100} width={400} alt="event banner" /> */}
+                <div className="">
+                  <div className="h-24 w-24 border  text-center rounded-full overflow-hidden">
+                    <picture>
+                      <img src={responseData?.avatar || "/user.jpg"} className="w-full h-full" alt="contestant avatar" />
+                    </picture>
+                    {/* <Image src={responseData?.avatar || "/evnt1.png"} className="w-full  h-full" width={80} height={50} alt="contestant avatar" /> */}
+                  </div>
+                  <Heading3 text={responseData?.nominee} classname={'text-2xl'} />
+                  <div className="flex space-x-2 py-2 text-appGray ">
+                    <ParagraphText text={'Category: '} classname={'text-sm font-light'} />
+                    <ParagraphText text={responseData?.category} classname={'text-sm font-light'} />
+                  </div>
+                  <ParagraphText
+                    text={`This award event is brougt to you by ${responseData?.award}`}
+                    classname={'text-xs! text-appGray font-light'}
+                  />
+                </div>
               </div>
-              {/* <Image src="/evnt1.png" className="h-full" height={100} width={400} alt="event banner" /> */}
-              <div className="">
-                <div className="h-24 w-24 border  text-center rounded-full overflow-hidden">
-                  <Image src="/user.jpg" className="w-full  h-full" width={80} height={50} alt="contestant avatar" />
-                </div>
-                <Heading3 text={'John Doe'} classname={'text-2xl'} />
-                <div className="flex space-x-2 py-2 text-appGray ">
-                  <ParagraphText text={'Category: '} classname={'text-sm font-light'} />
-                  <ParagraphText text={'User category '} classname={'text-sm font-light'} />
-                </div>
-                <ParagraphText
-                  text={'This category includes events that are located at various venues and differ in duration.'}
-                  classname={'text-xs! text-appGray font-light'}
+              <div className="lg:flex pt-6 space-x-3 space-y-4">
+                <CustomInput
+                  type='number'
+                  className='h-10 rounded-4xl lg:w-4/6 w-full'
+                  placeholder={'Enter number of votes to cast'}
+                  name={'votes'}
+                />
+                <CustomButton
+                  view={'primary'}
+                  classname='h-10 lg:w-2/6  w-full'
+                  label={'Proceed to payment'}
+                  onClick={() => {
+                    route.push('/payment')
+                    updateStates(setStates, { openModal: false })
+                  }}
                 />
               </div>
-            </div>
-            <div className="lg:flex pt-6 space-x-3 space-y-4">
-              <CustomInput
-                type='number'
-                className='h-10 rounded-4xl lg:w-4/6 w-full'
-                placeholder={'Enter number of votes to cast'}
-                name={'votes'}
-              />
-              <CustomButton
-                view={'primary'}
-                classname='h-10 lg:w-2/6  w-full'
-                label={'Proceed to payment'}
-                onClick={() => {
-                  route.push('/payment')
-                  updateStates(setStates, { openModal: false })
-                }}
-              />
-            </div>
-          </div>
+            </div> : <div className='text-center text-gray-600 text-lg'>Contestant not found with this code !!!</div>
         }
-        onClose={() => updateStates(setStates, { openModal: false })}
+        onClose={() => {
+          formik.setFieldValue('code', '');
+          updateStates(setStates, { openModal: false, code: '' })
+        }}
       />
 
 
@@ -106,14 +141,24 @@ export default function Page() {
             classname='lg:px-3 lg:text-base text-sm text-appGray mt-10 mb-2'
             text={'Enter the unique code of the contestant you want to vote for.'}
           />
-          <div className="flex space-x-3">
-            <CustomInput className='h-10 rounded-4xl' placeholder={'Enter code to vote'} name={'code'} />
-            <CustomButton
-              view={'secondary'}
-              classname='h-10'
-              label={'Cast vote'}
-              onClick={() => updateStates(setStates, { openModal: true })} />
-          </div>
+          <form onSubmit={formik.handleSubmit}>
+            <div className="flex space-x-3">
+              <CustomInput
+                error={formik.touched.code as any && formik.errors.code as any}
+                onChange={e => formik.setFieldValue('code', e.target.value)}
+                className='h-10 rounded-4xl'
+                placeholder={'Enter code to vote'}
+                name={'code'}
+              />
+              <CustomButton
+                view={'secondary'}
+                classname='h-10'
+                label={'Cast vote'}
+                type='submit'
+              // onClick={() => updateStates(setStates, { openModal: true })}
+              />
+            </div>
+          </form>
         </div>
       </div>
 
@@ -208,16 +253,20 @@ export default function Page() {
         </div>
         {/* card */}
         <div className="grid lg:grid-cols-4 grid-cols-2 lg:mb-20 mb-9 lg:gap-10 gap-7">
-          {events.map((item, index) => (
-            <div className="" key={index}>
-              <EventComponent item={{
-                itemName: item.itemName,
-                image: item.image,
-                date: item.date,
-                time: item.time,
-                location: item.location,
-                cost: item.cost
-              }} />
+          {eventResponseData.map((item: any, index: number) => (
+            <div
+              onClick={() => route.push(`/event-detail/${item?.id}`)}
+              className="" key={index}>
+              <EventComponent
+                item={{
+                  itemName: item?.name,
+                  image: item?.banner,
+                  date: item?.createdat,
+                  time: item?.createdat,
+                  location: item?.location,
+                  cost: item?.cost
+                }}
+              />
             </div>
           ))}
         </div>

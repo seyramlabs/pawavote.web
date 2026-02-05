@@ -12,13 +12,19 @@ interface EventProps {
     status?: string
     onClick?: () => void
 }
-export const EventComponent = ({status, item, onClick }: EventProps) => {
+export const EventComponent = ({ status, item, onClick }: EventProps) => {
     return (
         <div
-
             onClick={onClick}
-            className="py-3 hover:bg-appLightOrange1 cursor-pointer hover:scale-100 duration-200 lg:px-6 px-3 shadow-2xl flex-col justify-center text-center rounded-2xl">
-            <Image src={item.image} height={100} width={100} alt='' className='w-full pt-3 ' />
+            className="py-3 hover:bg-appLightOrange1 cursor-pointer hover:scale-100 duration-200 lg:px-4 px-3 shadow-2xl flex-col justify-center text-center rounded-2xl lg:max-h-[26rem] lg:max-w-[26rem]">
+            {/* <Image
+                src={item.image}
+                height={100} width={100} alt='' className='w-full pt-3 '
+            /> */}
+
+            <picture>
+                <img src={'/evnt1.png'} className="w-full h-[19rem] pt-3 rounded-lg" alt={item.itemName || ''} />
+            </picture>
             <div className="py-3">
                 <div className="font-semibold">{item.itemName}</div>
                 <div className="text-appGray text-xs lg:text-sm">
@@ -34,7 +40,7 @@ export const EventComponent = ({status, item, onClick }: EventProps) => {
                     </div>
                 </div>
             </div>
-           
+
         </div>
     )
 }
