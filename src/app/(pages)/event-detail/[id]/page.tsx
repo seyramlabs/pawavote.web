@@ -86,7 +86,7 @@ export default function Page() {
                             <div className="">
                                 <CustomButton
                                     variant="default"
-                                    onClick={()=>route.push("/event-overview")}
+                                    onClick={()=>route.push(`/event-overview/${awardDetail?.id}`)}
                                     // size="lg"
                                     // className="mt-4"
                                     label="View Nomination"

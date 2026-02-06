@@ -18,4 +18,16 @@ export const NomineesServer = {
       url: `/awards/${id}`,
     };
   },
+  GetAwardCategoryByAwardId: (id: number) => {
+    return {
+      method: "GET",
+      url: `/award/categories?award=${id}`,
+    };
+  },
+  GetNomineesByCategoryId: (id: number) => {
+    return {
+      method: "GET",
+      url: `/award/nominations?category=${id}`,
+    };
+  },
 };
