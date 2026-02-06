@@ -10,7 +10,11 @@ export default function Footer() {
 
             <div className="lg:flex w-full  lg:px-24 py-16 ">
                 <div className="lg:w-3/6 ">
-                    <div className="text-2xl pb-4 text-appOrange font-extrabold">LOGO</div>
+                    <div className="text-2xl pb-4 text-appOrange font-extrabold">
+                        <picture>
+                            <img src="/paawa.png" alt="Logo" className="h-10 cursor-pointer" />
+                        </picture>
+                    </div>
                     <div className="text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui ullam optio commodi? Nihil eos ducimus quae corporis maiores mollitia repudiandae quibusdam at iste dolorem recusandae, commodi assumenda vitae fugiat sed?</div>
                 </div>
                 <div className="lg:pl-6 pt-5 lg:pt-0 lg:space-y-0 space-y-4 grid lg:grid-cols-4 grid-cols-2">
@@ -58,7 +62,7 @@ export default function Footer() {
                 </div>
                 
                 <div className="">
-                    Copyright  2024. Company name. All rights reserved.
+                    Copyright  {new Date().getFullYear()}. PawaVote . All rights reserved.
                 </div>
             </div>
         </div>

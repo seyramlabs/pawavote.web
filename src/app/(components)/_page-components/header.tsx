@@ -2,10 +2,10 @@
 import { useState } from 'react';
 
 import {
-  AlignJustify,
-  X,
+    AlignJustify,
+    X,
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { updateStates } from '@/funtions/generalUpdate';
 
@@ -58,29 +58,56 @@ export default function Header() {
         }
     ]
 
+    // const menuItemDisplay = () => (
+    //     menuItems.map((item, index) => (
+    //         <span
+    //             key={index}
+    //             className="hover:font-700 hover:text-appOrange cursor-pointer text-md hover:underline lg:decoration-[0.18em] lg:underline-offset-14"
+    //         >
+
+    //             <span onClick={() => handleRoute(item.url)}>
+    //                 {item.name}
+    //             </span>
+    //         </span>
+    //     ))
+    // );
+    const pathname = usePathname();
+
     const menuItemDisplay = () => (
-        menuItems.map((item, index) => (
-            <span
-                key={index}
-                className="hover:font-700 hover:text-appOrange cursor-pointer text-md hover:underline lg:decoration-[0.18em] lg:underline-offset-14"
-            >
-                {/* {item.name === 'Products' ? (
-                    <CustomDropdown triggerLabel={item.name} items={item.children || []} />
-                ) : ( */}
+        menuItems.map((item, index) => {
+            const isActive = pathname === item.url;
+
+            return (
+                <span
+                    key={index}
+                    className={`
+          cursor-pointer text-md
+          hover:font-700 hover:underline lg:decoration-[0.18em] lg:underline-offset-14
+          ${isActive ? "text-red-500 font-700 font-bold" : "hover:text-appOrange"}
+        `}
+                >
                     <span onClick={() => handleRoute(item.url)}>
                         {item.name}
                     </span>
-                {/* )} */}
-            </span>
-        ))
+                </span>
+            );
+        })
     );
+
 
     return (
         <div>
 
             <div className="bg-appLightOrange w-full text-[0.9rem] lg:px-20 px-2 h-18 flex items-center justify-between ">
                 <div className="">
-                    Logo icon
+                    <picture>
+                        <img
+                            src="/paawa.png"
+                            alt="Logo"
+                            className="h-18 cursor-pointer"
+                        // onClick={() => handleRoute('/')}
+                        />
+                    </picture>
                 </div>
                 <div className="md:flex hidden  space-x-4 text-appLightOrange2 tex">
                     {menuItemDisplay()}
