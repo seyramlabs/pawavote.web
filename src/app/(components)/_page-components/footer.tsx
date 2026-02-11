@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="bg-black px-5 text-white">
 
             <div className="lg:flex w-full  lg:px-24 py-16 ">
-                <div className="lg:w-3/6 ">
+                <div className="lg:w-3/6 "> 
                     <div className="text-2xl pb-4 text-appOrange font-extrabold">
                         <picture>
                             <img src="/pawalong.jpeg" alt="Log1o" className="h-14 cursor-pointer" />
