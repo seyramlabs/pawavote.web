@@ -8,6 +8,7 @@ import {
 import { EventComponent } from '@/app/(components)/_page-components/eventCard';
 import { NomineesServer } from '@/app/_homeResources/logic/server';
 import { useFetchData } from '@/lib/function/useFetch';
+import { CalendarX2Icon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function Events() {
@@ -53,7 +54,15 @@ export default function Events() {
         </div>
       </div>
       <div className="grid md:grid-cols-4 grid-cols-2 mb-20 gap-10">
-        {awardsList.map((item: any, index: number) => (
+        {
+        events?.length < 1 ? 
+        <div className="col-span-4 text-center text-2xl text-orange-400">
+          <CalendarX2Icon className='mx-auto mb-3 ' size={50} />
+         <span>
+           No events found
+          </span>
+          </div>:
+        events?.map((item: any, index: number) => (
           <div 
           onClick={()=>route.push(`/event-detail/${item.id}`)}
           className="" key={index}>
@@ -69,10 +78,13 @@ export default function Events() {
         ))}
       </div>
       <div className="">
+        {awardsList?.length > 0 && 
         <CustomPagination
           currentPage={1} totalPages={10}
           onPageChange={() => { }}
         />
+        
+        }
       </div>
     </div>
   )

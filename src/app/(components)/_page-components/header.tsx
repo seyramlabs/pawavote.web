@@ -102,7 +102,7 @@ export default function Header() {
                 <div className="">
                     <picture>
                         <img
-                            src="/paawa.png"
+                            src="/pawa.png"
                             alt="Logo"
                             className="h-18 cursor-pointer"
                         // onClick={() => handleRoute('/')}

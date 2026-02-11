@@ -22,7 +22,7 @@ export const EventComponent = ({ status, item, onClick }: EventProps) => {
                 height={100} width={100} alt='' className='w-full pt-3 '
             /> */}
 
-            <picture>
+            <picture className=''>
                 <img src={'/evnt1.png'} className="w-full h-[19rem] pt-3 rounded-lg" alt={item.itemName || ''} />
             </picture>
             <div className="py-3">

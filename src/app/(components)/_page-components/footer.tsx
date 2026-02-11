@@ -12,7 +12,7 @@ export default function Footer() {
                 <div className="lg:w-3/6 ">
                     <div className="text-2xl pb-4 text-appOrange font-extrabold">
                         <picture>
-                            <img src="/paawa.png" alt="Logo" className="h-10 cursor-pointer" />
+                            <img src="/pawalong.jpeg" alt="Log1o" className="h-14 cursor-pointer" />
                         </picture>
                     </div>
                     <div className="text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui ullam optio commodi? Nihil eos ducimus quae corporis maiores mollitia repudiandae quibusdam at iste dolorem recusandae, commodi assumenda vitae fugiat sed?</div>
